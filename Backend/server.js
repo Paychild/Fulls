@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const db = require('./database');
 const booksRouter = require('./routes/books'); // Import your books router
@@ -13,8 +14,10 @@ app.use(express.json());
 // Mount router -> makes endpoints available at /api/books
 app.use('/api', booksRouter);
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Book Tracker API is running!' });
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
